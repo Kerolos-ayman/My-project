@@ -1,0 +1,143 @@
+<!DOCTYPE HTML> 
+<html> 
+<head> 
+	<title></title> 
+</head> 
+
+<body style="text-align:center;" id="body"> 
+	<h1 style="color:red;">Learn the English Letters</h1> 
+	<p id="GFG_UP"
+	style="font-size: 19px; 
+		   font-weight: bold;"> 
+	</p> 
+    Numbers of Letters <select id="selectNumber">
+        <option></option>
+    </select>
+	<button id="b">DB</button>
+	<button id="btn">Generate</button> 
+	<p id="GFG_DOWN"
+	style="color: blue; 
+			font-size: 24px; 
+			font-weight: bold;"> 
+	</p> 
+     <div id="divbtn"></div>
+     <div id="divimg"></div>
+	 <script src="jquery-3.4.1.min.js"></script>
+	<script>
+	window.addEventListener("load",function(){
+	var arr={type: "load",target: "load Html",date: new Date().toUTCString()};
+	localStorage.setItem("Load",JSON.stringify(arr));
+});
+window.addEventListener("unload",function(){
+	var arr={type: "unload",target: "un load Html",date: new Date().toUTCString()};
+	localStorage.setItem("unLoad",JSON.stringify(arr));
+});
+	    var up = document.getElementById('GFG_UP');
+	    var down = document.getElementById('GFG_DOWN');
+	    up.innerHTML ='Click on the button to generate random letters';
+
+	    var select = document.getElementById("selectNumber");
+
+	    var options = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                       "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                       "21", "22", "23", "24", "25", "26"];
+
+        var letter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", 
+					  "j", "k", "l", "m", "n", "o", "p", "q", "r",
+					  "s", "t", "u", "v", "w", "x", "y", "z"];
+
+        var img = ["a.jpg", "b.jpg", "c.jpg", "d.jpg", "e.jpg", "f.jpg", "g.jpg", "h.jpg", "i.jpg",
+				   "j.jpg", "k.jpg", "l.jpg", "m.jpg", "n.jpg", "o.jpg", "p.jpg", "q.jpg", "r.jpg", 
+				   "s.jpg", "t.jpg", "u.jpg", "v.jpg", "w.jpg", "x.jpg", "y.jpg", "z.jpg"];
+
+	   for (var i = 0; i < options.length; i++) {
+	        var opt = options[i];
+	        var el = document.createElement("option");
+	        el.textContent = opt;
+	        el.value = opt;
+	        select.appendChild(el);
+	    }
+
+	    var btn = document.getElementById("btn");
+	    var divbtn = document.getElementById("divbtn");
+	    btn.addEventListener("click", function () {
+		var arr={type: "generate",target: "generate",date: new Date().toUTCString()};
+	localStorage.setItem("generate",JSON.stringify(arr));
+            var divimg = document.getElementById("divimg");
+	        while (divbtn.firstChild) {
+	            divbtn.removeChild(divbtn.firstChild)
+	        }
+			
+	        for (var i = 0; i < select.value; i++) {
+				var y = 0;
+	            var num = Math.floor(Math.random() * letter.length);
+				var x = document.getElementsByTagName("button");
+				for(var j=1; j<x.length ; j++){
+					if (letter[num]==x[j].name) {
+					y = 1;
+					i--;
+					}
+				}
+					if (y==0){
+					var bt = document.createElement("button");
+					var txt = document.createTextNode(letter[num]);
+					bt.appendChild(txt);
+					bt.name=letter[num];
+					divbtn.appendChild(bt);
+					}
+	        }
+			
+			var btns=document.getElementsByTagName("button");
+			for(var i=1;i<btns.length;i++)
+				{
+					btns[i].addEventListener('click', function (e) {
+					var arr={type: "letter",target: e.target.textContent,date: new Date().toUTCString()};
+	localStorage.setItem("letter",JSON.stringify(arr))
+					while (divimg.firstChild) {
+					divimg.removeChild(divimg.firstChild)
+				}
+				
+			var imgg = document.createElement("img");
+	        imgg.setAttribute("src",e.target.textContent +".jpg");
+			imgg.setAttribute("width","600px");
+			imgg.setAttribute("height","400px");
+            divimg.appendChild(imgg);
+					});
+				}
+			//	alert(localStorage.getItem("Generate"));
+		});
+        function save(){
+		for(var j=0;j<localStorage.length;j++)
+		{
+		$o= localStorage.getItem(localStorage.key(j));
+		$E=JSON.parse($o);
+		$.ajax({
+			url:"db.php",
+			type:"post",
+			data:{
+			"dd":1,
+			"T":$E.type,
+			"Ta":$E.target,
+			"D":$E.time
+}});
+    localStorage.clear();
+    setTimeout(save, 5000);
+		}
+		}
+		save();
+		$('#b').click(function(){
+		$.ajax({
+			url:"db.php",
+			type:"get",
+			data:{
+			"dd":1
+},
+"success": function($response){
+	console.log($response);
+	}});
+		
+		});
+	</script> 
+
+      </body> 
+</html> 
